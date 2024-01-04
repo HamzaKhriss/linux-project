@@ -1,0 +1,23 @@
+#!/bin/bash
+# Create Physical Volume and Volume Group
+sudo pvcreate /dev/md2
+sudo vgcreate vg00 /dev/md2
+
+# Create Logical Volumes
+sudo lvcreate -L 800M -n Music vg00
+sudo lvcreate -L 1G -n Movies vg00
+sudo lvcreate -L 4G -n Games vg00
+sudo lvcreate -L 2G -n Downloads vg00
+
+# Format Logical Volumes
+sudo mkfs.ext4 /dev/vg00/Music
+sudo mkfs.ext4 /dev/vg00/Movies
+sudo mkfs.ext4 /dev/vg00/Games
+sudo mkfs.ext4 /dev/vg00/Downloads
+
+# Mount Logical Volumes
+sudo mkdir -p /mnt/{Music,Movies,Games,Downloads}
+sudo mount /dev/vg00/Music /mnt/Music
+sudo mount /dev/vg00/Movies /mnt/Movies
+sudo mount /dev/vg00/Games /mnt/Games
+sudo mount /dev/vg00/Downloads /mnt/Downloads
