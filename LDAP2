@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# LDAP server details
+LDAP_SERVER="ldap://ldap.example.com"
+BASE_DN="dc=example,dc=com"
+
+# Function to add an LDIF entry to LDAP
+add_entry() {
+    ldif_file="$1"
+    ldapadd -x -D "cn=admin,$BASE_DN" -w your_ldap_password -f "$ldif_file"
+}
+
+# Create departments
+departments=("Ventes" "Recherche et développement")
+for department in "${departments[@]}"; do
+    cat <<EOF >department.ldif
+dn: ou=$department,${BASE_DN}
+ou: $department
+objectClass: organizationalUnit
+EOF
+    add_entry "department.ldif"
+done
+
+# Create users
+users=("David" "Sarah" "Fouad")
+for user in "${users[@]}"; do
+    cat <<EOF >user_${user}.ldif
+dn: uid=${user},ou=People,${BASE_DN}
+uid: ${user}
+cn: ${user}
+sn: Lastname
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+userPassword: Password
+EOF
+    add_entry "user_${user}.ldif"
+done
+
+# Add users to groups
+cat <<EOF >add_to_group.ldif
+dn: cn=Ventes,ou=Groups,${BASE_DN}
+changetype: modify
+add: member
+member: uid=Fouad,ou=People,${BASE_DN}
+
+dn: cn=Recherche et développement,ou=Groups,${BASE_DN}
+changetype: modify
+add: member
+member: uid=David,ou=People,${BASE_DN}
+member: uid=Sarah,ou=People,${BASE_DN}
+EOF
+ldapmodify -x -D "cn=admin,$BASE_DN" -w your_ldap_password -f "add_to_group.ldif"
+
+# Cleanup LDIF files (optional)
+rm -f department.ldif user_*.ldif add_to_group.ldif
+
+echo "LDAP entries created successfully.
