@@ -1,0 +1,43 @@
+//use 'ldapadd
+# Create users
+dn: uid=david,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: david
+cn: David
+sn: David
+...
+
+dn: uid=sarah,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: sarah
+cn: Sarah
+sn: Sarah
+...
+
+dn: uid=fouad,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: fouad
+cn: Fouad
+sn: Fouad
+...
+
+# Create departments
+dn: ou=Ventes,dc=example,dc=com
+objectClass: organizationalUnit
+ou: Ventes
+
+dn: ou=R&D,dc=example,dc=com
+objectClass: organizationalUnit
+ou: R&D
+
+# Add users to groups
+dn: cn=Ventes,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+cn: Ventes
+member: uid=fouad,ou=people,dc=example,dc=com
+
+dn: cn=R&D,ou=groups,dc=example,dc=com
+objectClass: groupOfNames
+cn: R&D
+member: uid=david,ou=people,dc=example,dc=com
+member: uid=sarah,ou=people,dc=example,dc=com
