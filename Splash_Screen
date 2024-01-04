@@ -1,0 +1,18 @@
+#!/bin/bash
+# Install Plymouth
+sudo dnf install -y plymouth
+
+# Set Plymouth Theme (Replace 'theme-name' with your custom theme)
+sudo plymouth-set-default-theme theme-name -R
+
+# Update initramfs
+sudo dracut -f
+
+# Update GRUB Configuration
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+# For EFI systems use: sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+
+# Reboot to apply changes
+echo "Rebooting in 5 seconds to apply changes..."
+sleep 5
+sudo reboot
