@@ -1,1 +1,1 @@
-Follow this video if you are having trouble with LDAP on Fedora :https://youtu.be/X88vulgjZ0o?si=f_MEempMKcznc6XC .
+Follow this video if you are having trouble with LDAP on Fedora :https://youtu.be/X88vulgjZ0o?si=f_MEempMKcznc6XC (not our video).
