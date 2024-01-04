@@ -1,0 +1,17 @@
+#!/bin/bash
+# Install Chrony (NTP)
+sudo dnf install -y chrony
+
+# Configure NTP Server
+sudo sed -i '/^pool 2./d' /etc/chrony.conf
+cat <<EOF | sudo tee -a /etc/chrony.conf
+server 0.pool.ntp.org iburst
+server 1.pool.ntp.org iburst
+server 2.pool.ntp.org iburst
+server 3.pool.ntp.org iburst
+allow 192.168.145.0/24
+EOF
+
+# Start and Enable Chrony Service
+sudo systemctl enable chronyd
+sudo systemctl start chronyd
