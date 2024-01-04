@@ -1,0 +1,19 @@
+#!/bin/bash
+# Install DHCP Server
+sudo dnf install -y dhcp-server
+
+# Configure DHCP Server
+cat <<EOF | sudo tee /etc/dhcp/dhcpd.conf
+subnet 192.168.145.0 netmask 255.255.255.0 {
+    range 192.168.145.10 192.168.145.200;
+    option routers 192.168.1.1;
+    option subnet-mask 255.255.255.0;
+    option domain-name-servers 8.8.8.8, 8.8.4.4;
+    default-lease-time 600;
+    max-lease-time 7200;
+}
+EOF
+
+# Start and Enable DHCP Service
+sudo systemctl enable dhcpd
+sudo systemctl start dhcpd
